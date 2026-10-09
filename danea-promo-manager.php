@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Promo Danea per WooCommerce
  * Description: Assegna automaticamente i prodotti sincronizzati da Danea Easyfatt alle categorie promo e calcola il prezzo scontato in base a un codice.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce
  * Text Domain: danea-promo
@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'DPM_VERSION', '1.1.0' );
+define( 'DPM_VERSION', '1.2.0' );
 define( 'DPM_FILE', __FILE__ );
 define( 'DPM_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DPM_URL', plugin_dir_url( __FILE__ ) );

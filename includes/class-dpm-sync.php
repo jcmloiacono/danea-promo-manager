@@ -8,6 +8,7 @@ class DPM_Sync {
 
 	const META_LINK = 'meta_product_link';
 	const META_FLAG = '_dpm_applied';
+	const META_VIS  = '_dpm_vis';
 
 	private static $queue = array();
 	private static $busy  = false;
@@ -83,6 +84,26 @@ class DPM_Sync {
 				$changed = true;
 			}
 
+			// Visibilita nel catalogo: i prodotti promo solo nel negozio (non nella ricerca).
+			$vis_flag    = get_post_meta( $product_id, self::META_VIS, true );
+			$current_vis = $product->get_catalog_visibility();
+
+			if ( $promo ) {
+				if ( 'catalog' !== $current_vis ) {
+					$product->set_catalog_visibility( 'catalog' );
+					$changed = true;
+				}
+				$vis_flag_needed = true;
+			} elseif ( $vis_flag || $was_in_promo ) {
+				if ( 'catalog' === $current_vis ) {
+					$product->set_catalog_visibility( 'visible' );
+					$changed = true;
+				}
+				$vis_flag_needed = false;
+			} else {
+				$vis_flag_needed = (bool) $vis_flag;
+			}
+
 			// Prezzo scontato.
 			$flag         = get_post_meta( $product_id, self::META_FLAG, true );
 			$regular      = (float) $product->get_regular_price();
@@ -115,6 +136,12 @@ class DPM_Sync {
 				$product->save();
 			}
 
+			if ( $vis_flag_needed && ! $vis_flag ) {
+				update_post_meta( $product_id, self::META_VIS, '1' );
+			} elseif ( ! $vis_flag_needed && $vis_flag ) {
+				delete_post_meta( $product_id, self::META_VIS );
+			}
+
 			if ( $flag_needed && ! $flag ) {
 				update_post_meta( $product_id, self::META_FLAG, '1' );
 			} elseif ( ! $flag_needed && $flag ) {
@@ -144,6 +171,7 @@ class DPM_Sync {
 
 		$ids = get_posts( $base + array( 'meta_key' => self::META_LINK ) ); // phpcs:ignore WordPress.DB.SlowDBQuery
 		$ids = array_merge( $ids, get_posts( $base + array( 'meta_key' => self::META_FLAG ) ) ); // phpcs:ignore WordPress.DB.SlowDBQuery
+		$ids = array_merge( $ids, get_posts( $base + array( 'meta_key' => self::META_VIS ) ) ); // phpcs:ignore WordPress.DB.SlowDBQuery
 
 		$cat_ids = DPM_Promos::cat_ids();
 		if ( $cat_ids ) {

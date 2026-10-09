@@ -1,0 +1,36 @@
+.dpm-wrap .dpm-card {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 4px 20px 16px;
+	margin: 20px 0;
+	max-width: 1000px;
+}
+.dpm-wrap .dpm-inline {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0;
+}
+.dpm-wrap .dpm-table td {
+	vertical-align: middle;
+}
+.dpm-wrap .dpm-code {
+	margin-right: 6px;
+}
+.dpm-wrap .dpm-bar {
+	background: #dcdcde;
+	border-radius: 4px;
+	height: 14px;
+	overflow: hidden;
+	max-width: 500px;
+}
+.dpm-wrap .dpm-bar-fill {
+	background: #2271b1;
+	height: 100%;
+	width: 0;
+	transition: width 0.2s;
+}
+.dpm-wrap .select2-container {
+	max-width: 100%;
+}
